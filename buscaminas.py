@@ -19,8 +19,8 @@ def imprimirTablero(tablero):
       print()
       print('-------------------------------------')
 
-def imprimirTableroConBombas(tablero, bombas):
-   for i in range(8):
+def imprimirTableroConBombas(numeroBombas, tablero, bombas):
+   for i in range(numeroBombas):
       x=bombas[i][0]
       y=bombas[i][1]
       tablero[x][y]='*'
@@ -33,9 +33,9 @@ def estaVaciaUnaCasilla(tablero,x,y):
    else:
       return False
 
-def colocarBombas():
+def colocarBombas(numeroBombas):
    bombas=[]
-   for i in range(8):
+   for i in range(numeroBombas):
       while True:
          x=random.randint(0,8)
          y=random.randint(0,8)
@@ -86,37 +86,75 @@ def rellenarCercanas(tablero, bombas, x, y):
    for i in range(len(lista)):
       x=lista[i][0]
       y=lista[i][1]
-      if distanciaABomba(tablero, bombas, x, y)==1 or distanciaABomba(tablero, bombas, x, y)==0:
+      if distanciaABomba(tablero, bombas, x, y)==0:
          almacenarDistancia(tablero, bombas, x, y)
          rellenarCercanas(tablero, bombas, x, y)
+      elif distanciaABomba(tablero, bombas, x, y)==1:
+         almacenarDistancia(tablero, bombas, x, y)
          
 
 def juego():
-   tablero=crearTablero()
-   bombas=colocarBombas()
-   imprimirTablero(tablero)
+   print("Bienvenido al juego de buscaminas")
    while True:
-      print("Ingrese la coordenada de la casilla")
-      while True:
-         x=int(input("x: ")) - 1
-         y=int(input("y: ")) - 1
-         if 0<=x<9 and 0<=y<9:
-            break
-         else:
-            print("Ingrese una coordenada valida")
-      if (x,y) in bombas:
-         imprimirTableroConBombas(tablero, bombas)
-         print('Has perdido')
+      dificultad=input("¿Qué dificultad quieres? (1, 2, 3, 4, 5): ")
+      if dificultad=='1':
+         numeroBombas=8
+         break
+      elif dificultad=='2':
+         numeroBombas=15
+         break
+      elif dificultad=='3':
+         numeroBombas=25
+         break
+      elif dificultad=='4':
+         numeroBombas=40
+         break
+      elif dificultad=='5':
+         numeroBombas=80
          break
       else:
-         if estaVaciaUnaCasilla(tablero,x,y):
-            almacenarDistancia(tablero, bombas, x, y)
-            rellenarCercanas(tablero, bombas, x, y)
-            imprimirTablero(tablero)
-            if tableroLleno(tablero):
-               print("Ganaste")
+         print("Esa opción no existe")
+
+   tablero=crearTablero()
+   bombas=colocarBombas(numeroBombas)
+   imprimirTablero(tablero)
+   while True:
+      print("Quieres colocar una bandera? (s/n)")
+      respuesta=input()
+      if respuesta=='s':
+         print("Escribe las coordenadas de la bandera")
+         while True:
+            x=int(input("x: ")) - 1
+            y=int(input("y: ")) - 1
+            if estaVaciaUnaCasilla(tablero,x,y):
+               tablero[x][y]='F'
+               imprimirTablero(tablero)
                break
+            else:
+               print("Ya hay una bandera en esa casilla")
+
+      else:
+         print("Ingrese la coordenada de la casilla")
+         while True:
+            x=int(input("x: ")) - 1
+            y=int(input("y: ")) - 1
+            if 0<=x<9 and 0<=y<9:
+               break
+            else:
+               print("Ingrese una coordenada valida")
+         if (x,y) in bombas:
+            imprimirTableroConBombas(numeroBombas, tablero, bombas)
+            print('Has perdido')
+            break
          else:
-            print("Ya ingresaste esa casilla")
+            if estaVaciaUnaCasilla(tablero,x,y):
+               almacenarDistancia(tablero, bombas, x, y)
+               rellenarCercanas(tablero, bombas, x, y)
+               imprimirTablero(tablero)
+               if tableroLleno(tablero):
+                  print("Ganaste")
+                  break
+            else:
+               print("Ya ingresaste esa casilla")
 
 juego()
