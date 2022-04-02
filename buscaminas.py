@@ -138,14 +138,13 @@ def juego():
    bombas=colocarBombas(numeroBombas, tamaño)
    imprimirTablero(tablero, tamaño)
    while True:
-      print("Quieres colocar una bandera? (s/n)")
-      respuesta=input()
-      if respuesta=='s':
+      print("Ingrese la coordenada x de la casilla o F para colocar una bandera")
+      entrada=input("x: ")
+      if entrada=='F':
          print("Escribe las coordenadas de la bandera")
          while True:
             x=int(input("x: ")) - 1
             y=int(input("y: ")) - 1
-
             if 0<=x<tamaño and 0<=y<tamaño:
                if estaVaciaUnaCasilla(tablero,x,y):
                   tablero[x][y]='F'
@@ -160,16 +159,16 @@ def juego():
                   print("Ya hay una bandera en esa casilla")
             else:
                print("Las coordenadas deben estar entre 1 y", tamaño)
-
       else:
-         print("Ingrese la coordenada de la casilla")
+         x=int(entrada) - 1
          while True:
-            x=int(input("x: ")) - 1
             y=int(input("y: ")) - 1
             if 0<=x<tamaño and 0<=y<tamaño:
                break
             else:
                print("Ingrese una coordenada valida")
+               x=int(input("x: ")) - 1
+
          if (x,y) in bombas:
             imprimirTableroConBombas(numeroBombas, tablero, bombas, tamaño)
             print('Has perdido')
