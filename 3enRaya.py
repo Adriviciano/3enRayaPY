@@ -14,7 +14,9 @@ def imprimirTablero(tablero):
     '''Imprime el tablero'''
     print()
     for i in range(3):
-        print(tablero[i][0] + ' | ' + tablero[i][1] + ' | ' + tablero[i][2])
+        print(' ' + tablero[i][0] + ' | ' + tablero[i][1] + ' | ' + tablero[i][2])
+        if i != 2:
+            print("-----------")
     print()
 
 def tableroLleno(tablero):
